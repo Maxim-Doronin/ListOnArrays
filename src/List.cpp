@@ -18,9 +18,10 @@ List::~List(){
 void List::print(){
 	int i = nextRefs[0];
 	while (i != 0){
-		std::cout << data[i] << std::endl;
+		std::cout << data[i] << ' ';
 		i = nextRefs[i];
 	}
+	std::cout << std::endl;
 }
 
 void List::erase(valtype key){
@@ -62,12 +63,55 @@ void List::insertAfter(valtype elem, valtype key){
 	nextRefs[i] = freeIdx;
 }
 
-void List::insertLast(valtype key){
+void List::insertFirst(valtype key) {
+	int freeIdx = searchFree();
+	data[freeIdx] = key;
+	nextRefs[freeIdx] = nextRefs[0];
+	nextRefs[0]       = freeIdx;
+}
+
+void List::insertLast(valtype key) {
 	int freeIdx = searchFree();
 	int i = nextRefs[0];
-	while (i != 0)
+	while (nextRefs[i] != 0)
 		i = nextRefs[i];
 	data[freeIdx] = key;
-	nextRefs[i] = freeIdx;
+	nextRefs[i]   = freeIdx;
 	nextRefs[freeIdx] = 0;
+}
+
+void List::insertInSort(valtype key){
+	int i = nextRefs[0];
+	int prev = 0;
+	while ((i!=0)&&(data[i] < key)){
+		prev = i;
+		i = nextRefs[i];
+	}
+
+	if (prev == 0) {
+		insertFirst(key);
+		return;
+	}
+
+	insertAfter(data[prev], key);
+}
+
+valtype List::searchMax(){
+	int i = nextRefs[0];
+	if (i == 0) throw "List is empty";
+	valtype max = data[i];
+	while (i != 0){
+		if (data[i] > max) max = data[i];
+		i = nextRefs[i];
+	}
+	return max;
+}
+
+void List::negative(List& list){
+	int i = nextRefs[0];
+	while (i != 0){
+		if (data[i] < 0) 
+			list.insertLast(data[i]);
+		i = nextRefs[i];
+	}
 }

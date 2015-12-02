@@ -16,5 +16,10 @@ public:
 	int searchFree();
 
 	void insertAfter(valtype, valtype);
+	void insertFirst(valtype);
 	void insertLast(valtype);
+
+	void insertInSort(valtype);
+	valtype searchMax();
+	void negative(List&);
 };
